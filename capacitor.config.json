@@ -1,0 +1,14 @@
+{
+  "appId": "ro.pitesti.watchweather",
+  "appName": "Watch Weather",
+  "webDir": "dist",
+  "backgroundColor": "#000000",
+  "server": {
+    "androidScheme": "https"
+  },
+  "android": {
+    "backgroundColor": "#000000",
+    "allowMixedContent": false,
+    "webContentsDebuggingEnabled": false
+  }
+}

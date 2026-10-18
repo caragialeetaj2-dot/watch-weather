@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#000000">
+  <title>Watch &amp; Weather</title>
+</head>
+<body>
+  <div id="app">
+    <!-- SCREEN 1: WATCH FACE -->
+    <section id="watch" class="screen active">
+      <div id="clock">
+        <span id="hh">00</span><span class="colon">:</span><span id="mm">00</span><span class="sec" id="ss">00</span>
+      </div>
+      <div id="dayname">&nbsp;</div>
+      <div id="datefull">&nbsp;</div>
+    </section>
+
+    <!-- SCREEN 2: WEATHER -->
+    <section id="weather" class="screen">
+      <div class="sky cloudy-day" id="sky"></div>
+      <div class="wtop">
+        <div id="locName">PITEȘTI, ROMANIA</div>
+        <div id="locSub">Str. Banat, Argeș County</div>
+        <div id="curTemp">--°C</div>
+        <div class="tabs" id="tabs"></div>
+        <div class="curRight">
+          <div id="curIcon"></div>
+          <div id="curDesc">Loading…</div>
+          <div class="curDetails" id="curDetails"></div>
+        </div>
+      </div>
+      <div class="wbottom" id="forecastPanel">
+        <div class="forecastScroll" id="forecastScroll">
+          <div id="forecast"></div>
+        </div>
+        <button class="forecastToggle" id="forecastToggle" type="button">Zile următoare</button>
+        <div id="status"></div>
+      </div>
+    </section>
+
+    <div id="dots"></div>
+  </div>
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

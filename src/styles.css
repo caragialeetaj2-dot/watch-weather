@@ -1,0 +1,123 @@
+/* Fixed 720p design canvas (1280x720), scaled proportionally to any screen */
+:root { --W: 1280px; --H: 720px; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+  width: 100%; height: 100%; background: #000; overflow: hidden; overscroll-behavior: none;
+  font-family: "Roboto", "Segoe UI", Helvetica, Arial, sans-serif; color: #fff;
+  -webkit-user-select: none; user-select: none; -webkit-tap-highlight-color: transparent;
+}
+#app {
+  position: absolute; left: 50%; top: 50%; width: var(--W); height: var(--H);
+  transform: translate(-50%, -50%); transform-origin: center center; overflow: hidden; background: #000;
+}
+.screen { position: absolute; inset: 0; opacity: 0; transition: opacity .8s ease; pointer-events: none; }
+.screen.active { opacity: 1; pointer-events: auto; }
+
+/* ---------- SCREEN 1 : WATCH FACE ---------- */
+#watch { background: #000; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+#clock {
+  font-size: 330px; font-weight: 200; line-height: 1; letter-spacing: -6px;
+  font-variant-numeric: tabular-nums; display: flex; align-items: flex-start;
+}
+#clock .colon { animation: blink 1s steps(1) infinite; margin: 0 4px; position: relative; top: -12px; }
+#clock .sec { font-size: 70px; font-weight: 300; letter-spacing: 0; margin-left: 18px; margin-top: 40px; color: #bbb; }
+@keyframes blink { 50% { opacity: .25; } }
+#dayname { font-size: 52px; font-weight: 300; margin-top: 26px; letter-spacing: 2px; }
+#datefull { font-size: 38px; font-weight: 300; color: #ccc; margin-top: 8px; letter-spacing: 1px; }
+
+/* ---------- SCREEN 2 : WEATHER ---------- */
+#weather { background: #0d2a4a; }
+.sky { position: absolute; left: 0; top: 0; width: 100%; height: 420px; overflow: hidden; transition: background 1s; }
+.sky.clear-day  { background: linear-gradient(#3f86d4 0%, #7fb6ea 55%, #cfe6f7 100%); }
+.sky.cloudy-day { background: linear-gradient(#6f8399 0%, #a3b3c4 60%, #d6dee6 100%); }
+.sky.rain       { background: linear-gradient(#3d4a59 0%, #64717f 60%, #8f9aa5 100%); }
+.sky.storm      { background: linear-gradient(#1f252e 0%, #3a434f 60%, #5b6470 100%); }
+.sky.snow       { background: linear-gradient(#8ea5bd 0%, #c5d3e0 60%, #eef3f7 100%); }
+.sky.fog        { background: linear-gradient(#8d969f 0%, #b5bcc3 60%, #d9dde1 100%); }
+.sky.night      { background: linear-gradient(#050d22 0%, #13254a 60%, #2b4472 100%); }
+.sky .glow {
+  position: absolute; right: 180px; top: -60px; width: 360px; height: 360px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,240,180,.85) 0%, rgba(255,220,120,.25) 40%, transparent 70%);
+}
+.sky .cloudshape {
+  position: absolute; background: #fff; border-radius: 100px; opacity: .75; filter: blur(3px);
+  animation: drift linear infinite;
+}
+.sky .cloudshape::before, .sky .cloudshape::after { content: ""; position: absolute; background: inherit; border-radius: 50%; }
+.sky .cloudshape::before { width: 55%; height: 180%; left: 12%; top: -90%; }
+.sky .cloudshape::after  { width: 40%; height: 140%; left: 48%; top: -60%; }
+@keyframes drift { from { transform: translateX(-400px); } to { transform: translateX(1700px); } }
+.sky .drop {
+  position: absolute; top: -30px; width: 2px; height: 26px;
+  background: linear-gradient(transparent, rgba(220,235,255,.8)); animation: fall linear infinite;
+}
+@keyframes fall { to { transform: translate(-40px, 480px); } }
+.sky .flake {
+  position: absolute; top: -10px; width: 7px; height: 7px; border-radius: 50%; background: #fff; opacity: .9;
+  animation: snowfall linear infinite;
+}
+@keyframes snowfall { to { transform: translate(40px, 450px); } }
+.sky .star { position: absolute; width: 2px; height: 2px; background: #fff; border-radius: 50%; animation: twinkle 3s ease-in-out infinite; }
+@keyframes twinkle { 50% { opacity: .2; } }
+.sky .flash { position: absolute; inset: 0; background: #fff; opacity: 0; animation: flash 7s infinite; }
+@keyframes flash { 0%, 93%, 100% { opacity: 0; } 94% { opacity: .55; } 95% { opacity: 0; } 96% { opacity: .35; } }
+.sky .mist { position: absolute; left: -10%; width: 120%; height: 60px; background: rgba(255,255,255,.35); filter: blur(18px); }
+.skyline { position: absolute; left: 0; bottom: 0; width: 100%; height: 170px; }
+
+.wtop {
+  position: absolute; left: 0; top: 0; width: 100%; height: 420px; padding: 34px 56px;
+  background: linear-gradient(90deg, rgba(3,14,30,.82) 0%, rgba(3,14,30,.64) 55%, rgba(3,14,30,.38) 100%);
+  text-shadow: 0 2px 10px rgba(0,0,0,.75);
+}
+#locName { font-size: 40px; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; }
+#locSub { font-size: 22px; font-weight: 300; opacity: .9; margin-top: 4px; }
+#curTemp { font-size: 200px; font-weight: 300; line-height: 1; margin-top: 12px; letter-spacing: -4px; }
+.curRight { position: absolute; right: 70px; top: 60px; width: 360px; text-align: center; }
+.curRight svg { width: 190px; height: 190px; filter: drop-shadow(0 4px 10px rgba(0,0,0,.25)); }
+#curDesc { font-size: 36px; font-weight: 400; margin-top: -6px; }
+.curDetails { font-size: 22px; line-height: 1.4; margin-top: 6px; }
+
+.tabs {
+  position: absolute; left: 50%; top: 30px; transform: translateX(-50%); display: flex; gap: 10px;
+  padding: 7px; border-radius: 28px; background: rgba(3,14,30,.72);
+}
+.tab {
+  padding: 8px 18px; border-radius: 22px; font: inherit; font-size: 18px; color: #fff;
+  background: rgba(0,0,0,.25); border: 1px solid rgba(255,255,255,.35); cursor: pointer; text-shadow: none;
+}
+.tab.on { background: rgba(255,255,255,.9); color: #0d2a4a; font-weight: 600; }
+
+/* Bottom panel: fixed frame; only the inner strip scrolls horizontally */
+.wbottom { position: absolute; left: 0; top: 420px; width: 100%; height: 300px; background: linear-gradient(#123a63, #0a2240); }
+.forecastScroll {
+  position: absolute; left: 0; top: 0; right: 0; height: 244px; padding: 30px 0 0 56px;
+  overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; touch-action: pan-x;
+  scrollbar-width: thin; scrollbar-color: rgba(255,255,255,.35) transparent;
+}
+.forecastScroll::-webkit-scrollbar { height: 6px; }
+.forecastScroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,.35); border-radius: 3px; }
+#forecast { display: flex; width: max-content; gap: 18px; padding-right: 56px; }
+.hcard, .dcard {
+  height: 206px; border: 2px solid rgba(255,255,255,.75); border-radius: 6px;
+  display: flex; flex-direction: column; align-items: center; justify-content: space-between; padding: 14px 0 16px;
+}
+.hcard { flex: 0 0 170px; }
+.hcard .t { font-size: 28px; font-weight: 400; }
+.hcard svg { width: 96px; height: 96px; }
+.hcard .v { font-size: 34px; font-weight: 400; }
+.dcard { flex: 0 0 180px; }
+.dcard .day { font-size: 23px; }
+.dcard svg { width: 78px; height: 78px; }
+.dcard .range { font-size: 24px; }
+.forecastToggle {
+  position: absolute; right: 56px; bottom: 18px; z-index: 2; padding: 11px 18px;
+  border: 1px solid rgba(255,255,255,.7); border-radius: 22px; background: rgba(3,14,30,.82);
+  color: #fff; font: inherit; font-size: 17px; cursor: pointer;
+}
+#status { position: absolute; left: 56px; bottom: 14px; font-size: 15px; opacity: .6; }
+#status.offline { color: #ffc65c; opacity: .95; font-weight: 500; }
+
+/* Screen indicator dots */
+#dots { position: absolute; bottom: 14px; left: 50%; transform: translateX(-50%); display: flex; gap: 10px; z-index: 10; pointer-events: none; }
+#dots span { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,.3); transition: background .3s; }
+#dots span.on { background: #fff; }
